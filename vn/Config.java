@@ -13,7 +13,7 @@ import java.util.Properties;
  */
 
 class Config {
-    static final String 	VERSION = " V2.3";
+    static final String 	VERSION = " V3.0";
     static final String 	TITLE = 
         "VN - Visualization of Nondeterminism" + VERSION;
 
@@ -21,21 +21,18 @@ class Config {
 	static private final String FILE_NAME = "config.cfg";
 
 	// Verbose output in progress pane
-	static final boolean    VERBOSE = false;
+	static final boolean    VERBOSE = true;
 	
 	private static void setDefaultProperties() {
-		properties.put("SOURCE_DIRECTORY",	"examples");
-    properties.put("HELP_FILE_NAME",	"txt\\help.txt");
-	  properties.put("ABOUT_FILE_NAME",	"txt\\copyright.txt");
-	  properties.put("SPIN_COMMAND", 		"bin\\spin.exe");
-	  properties.put("DOT_COMMAND",		"bin\\dot.exe");
-	  properties.put("C_COMMAND",         "c:\\mingw\\bin\\gcc.exe"); 
-		properties.put("DUMMY_JFF_FILE",	"examples\\dummy.jff");
-		properties.put("PAN", 				"pan.exe");
+		properties.put("SOURCE_DIRECTORY", "examples");
+    properties.put("HELP_FILE_NAME",	 "txt\\help.txt");
+	  properties.put("ABOUT_FILE_NAME",	 "txt\\copyright.txt");
+	  properties.put("ERIGONE_COMMAND",  "bin\\erigone.exe");
+	  properties.put("DOT_COMMAND",		   "bin\\dot.exe");
+		properties.put("DUMMY_JFF_FILE",	 "examples\\dummy.jff");
+
 		properties.put("HIGHLIGHT", 		Integer.toString(0));  // Color
 		properties.put("GRAPH_SIZE", 		Integer.toString(2));  // Large
-    properties.put("INTERACTIVE",   Integer.toString(0)); // None
-    properties.put("CHOOSE",        Boolean.toString(false)); // None
 	}
 
     static final String 	jflapExt = ".jff";
@@ -43,8 +40,6 @@ class Config {
     static final String 	graphExt = ".png";
     static final String 	pathExt  = ".pth";
     static final String 	PromelaExt = ".pml";
-    static final String 	JavaExt  = ".java";
-    static final String   interactiveModifier = "Interactive";
 
     static final int 		STATES = 100;
     static final int 		TRANSITIONS = 200;
@@ -112,17 +107,6 @@ class Config {
     static final int 		COLORMN  = KeyEvent.VK_C;
     static final String	BOLD	 = "Bold";
     static final int 		BOLDMN   = KeyEvent.VK_B;
-    static final String INTERACTIVE = "Interactive";
-    static final String NONE = "None";
-    static final int 		NONEMN   = KeyEvent.VK_N;
-    static final String PROMELA = "Promela";
-    static final int 		PROMELAMN   = KeyEvent.VK_R;
-    static final String JAVA    = "Java";
-    static final int 		JAVAMN   = KeyEvent.VK_J;
-    static final String JELIOT  = "Jeliot";
-    static final int 		JELIOTMN   = KeyEvent.VK_T;
-    static final String CHOOSE  = "Choose NDFA";
-    static final int 		CHOOSEMN   = KeyEvent.VK_H;
     
     static final String		ENTER_NUMBER = "Enter a positive integer and select Generate";
     static final String   FILE_ERROR   = "File error ";
@@ -134,10 +118,8 @@ class Config {
     static final String		GRAPH_WRITE  = "Writing graph ";
     static final String	  READ_PATH    = "Reading path file";
     static final String   READING      = "Reading ";
-    static final String		RUN_C        = "Running C compiler";
     static final String		RUN_DOT      = "Running dot";
-    static final String		RUN_PAN      = "Running pan";
-    static final String		RUN_SPIN     = "Running Spin";
+    static final String		RUN_ERIGONE  = "Running Erigone";
     static final String		SPIN_WRITE   = "Generating program ";
     static final String   SPIN_READ    = "Reading Promela program ";
     

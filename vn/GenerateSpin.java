@@ -31,67 +31,42 @@ class GenerateSpin {
         
         emit("byte i[" + (inputLength+1) + "];");
         emit("byte h;");
-        emit("int x;  /* Dummy variable for Find Next */");
-        
-        emit("inline Accept() {");
-        emit("\t_ = x;");
-        emit("\tprintf(\"**" + Config.RESULT_ACCEPT + "\\n\");");
-        emit("\tassert(false)");
-        emit("}");
-
-        emit("proctype FA() {");
-        emit("    goto q" + initial + ";");
+        emit("active proctype FA() {");
+        for (int i = 0; i < inputLength; i++)
+          emit("  i["+i+"] = '" + input.charAt(i) + "';");
+        emit("  i[" + inputLength + "] = '.';"); // Dummy
+        emit("  goto q" + initial + ";");
 
         int t = 0;   // Index of transitions
         int x = 0;   // Value of dummy variable
         for (Object sObject : stateObject) {
         	State st = (State) sObject;
         	emit("q" + st.name + ":");
-        	emit("\tprintf(\"**q" + st.name + "\\n\");"); 
-            emit("\tif"); 
+        	emit("  printf(\"**q" + st.name + "\\n\");"); 
+            emit("  if"); 
         	while (true) {
         		if (t == transitionObject.length) break;
         		Transition tr = (Transition) transitionObject[t];
         		if (tr.from.equals(st.name)) {
                 	if(tr.letter == 'L') 
-                		emit("\t:: true -> " + "x=x+" + (x++) +
-                			 "; printf(\"**L\\n\"); goto q" + 
-                             tr.to);
+                		emit("  :: true -> printf(\"**L\\n\"); goto q" + tr.to);
                 	else 
-                		emit("\t:: i[h] == '" + 
-                             tr.letter + 
-                    		 "' -> " + "x=x+" + (x++) + 
-                    		 "; printf(\"**%c\\n\", i[h]); h++; goto q" + 
-                             tr.to);
+                		emit("  :: i[h] == '" + tr.letter + 
+                    		 "' -> printf(\"**%c\\n\", i[h]); h++; goto q" + tr.to);
                 	t++;
         		}
         		else break;
         	}
         	if (st.finalState) 
-        		emit("\t:: i[h] == '.' -> " + "x=x+" + (x++) + "; Accept()");
-        	emit("\tfi;");
+        		emit("  :: i[h] == '.' -> goto accept" );
+      		emit("  :: else -> goto reject" );
+        	emit("  fi;");
         }
-        emit("}");
-        emit("active proctype watchdog() {");
-        emit("\ttimeout -> printf(\"**" + Config.RESULT_REJECT + "\\n\")");
-        emit("}");
-        		
-       	emit("init {");
-        emit("\tatomic {");
-        if (VN.multiple)
-        	for (int i = 0; i < inputLength; i++) {
-        		String ifString = "\tif ";
-        		for (char c : VN.symbols)
-        			ifString = ifString + " :: i["+i+"] = '" + c + "'";
-        		ifString = ifString + " fi;";
-        		emit(ifString);
-        }
-        else
-        	for (int i = 0; i < inputLength; i++)
-        		emit("\ti["+i+"] = '" + input.charAt(i) + "';");
-        emit("\ti[" + inputLength + "] = '.';"); // Dummy
-		emit("\trun FA();");
-        emit("\t}");
+        emit("accept:");
+        emit("  printf(\"**" + Config.RESULT_ACCEPT + "\\n\");");
+        emit("  assert(false);");
+        emit("reject:");
+        emit("    printf(\"**" + Config.RESULT_REJECT + "\\n\")");
         emit("}");
         programWriter.close();
 	}

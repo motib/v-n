@@ -24,17 +24,17 @@ import java.io.*;
 import java.util.ArrayList;
 
 public class VN extends JFrame implements ActionListener {
-    enum   SpinMode { RANDOM, INTERACTIVE, VERIFY, TRAIL, ALL_TRAILS, COMPILER, PAN };
+  enum   SpinMode { RANDOM, INTERACTIVE, VERIFY, TRAIL, ALL_TRAILS };
 
-    static File     file;
-	static String   fileName;
-    static String   fileRoot;
-    static int	    pathNumber;			// Counter of multiple paths
-    static boolean  multiple = false;	// Search for multiple inputs
-	static String   input;				// Textfield for input or length
-    static int 		currentState;		// Current final state for DFA
-    static String	partition;			// Equivalence classes for DFA
-    
+  static File     file;
+  static String   fileName;
+  static String   fileRoot;
+  static int	    pathNumber;			  // Counter of multiple paths
+  static boolean  multiple = false;	// Search for multiple inputs
+  static String   input;		        // Textfield for input or length
+  static int 		  currentState;		  // Current final state for DFA
+  static String	  partition;			  // Equivalence classes for DFA
+
     // Databases of states and transitions for FA and path
 	static ArrayList<State> states = 
 		new ArrayList<State>(Config.STATES);
@@ -146,12 +146,12 @@ public class VN extends JFrame implements ActionListener {
         }
 
         else if ((e.getSource() == toolEdit)) {
-        	if (file != null) 
-            gui.Main.main(new String[]{file.getAbsolutePath()}, true);
-        	else if (new File(Config.getStringProperty("DUMMY_JFF_FILE")).exists())
-        		gui.Main.main(new String[]{Config.getStringProperty("DUMMY_JFF_FILE")}, true);
-        	else 
-        		{ progress(Config.NO_JFF_FILE); return; }
+        // 	if (file != null) 
+        //     gui.Main.main(new String[]{file.getAbsolutePath()}, true);
+        // 	else if (new File(Config.getStringProperty("DUMMY_JFF_FILE")).exists())
+        // 		gui.Main.main(new String[]{Config.getStringProperty("DUMMY_JFF_FILE")}, true);
+        // 	else 
+        // 		{ progress(Config.NO_JFF_FILE); return; }
         } 
 
         else if (e.getSource() == toolGenerate) {
@@ -170,18 +170,8 @@ public class VN extends JFrame implements ActionListener {
         	partition = "";
         	clearAreas();
         	readAndShow("fa");
-          int interactive = Config.getIntProperty("INTERACTIVE");
-          boolean choose = Config.getBooleanProperty("CHOOSE");
-          if (interactive == 1)
-            GenerateSpinInteractive.writePromela(choose);
-          else if (interactive == 2)
-            GenerateJavaInteractive.writeJava(choose, false);
-          else if (interactive == 3)
-            GenerateJavaInteractive.writeJava(choose, true);
-          else {
-          	if (inputLength < 1) { VN.progress(Config.NO_INPUT); return; }
-            GenerateSpin.writePromela(input, inputLength);
-          }
+          if (inputLength < 1) { VN.progress(Config.NO_INPUT); return; }
+          GenerateSpin.writePromela(input, inputLength);
         	pathArea.setText(Config.GENERATED);
         }
         
@@ -215,15 +205,13 @@ public class VN extends JFrame implements ActionListener {
 	        	return;
 	        }
 	        else {
-                RunSpin.runSpin(spinMode);
-                if (spinMode == SpinMode.VERIFY) {
-                	RunSpin.runC();
-                	if (RunSpin.runPan(false))
-                		RunSpin.runSpin(SpinMode.TRAIL);
-                	else if (multiple)
-                		pathArea.append(Config.ACCEPTS_ON + inputs);
-                	else return;
-                }
+            RunSpin.runSpin(spinMode);
+            if (spinMode == SpinMode.VERIFY) {
+              if (multiple)
+                pathArea.append(Config.ACCEPTS_ON + inputs);
+              else
+                RunSpin.runSpin(SpinMode.TRAIL);
+            }
 	        }
         	showGraph();
         }
@@ -246,23 +234,21 @@ public class VN extends JFrame implements ActionListener {
         	states.get(currentState).finalState = true;
         	GenerateSpin.writePromela(input, inputLength);
         	RunSpin.runSpin(SpinMode.VERIFY);
-			RunSpin.runC();
-    		RunSpin.runPan(true);
-    		inputs.clear();
-    		pathNumber = 1;
-    		do {
-   				RunSpin.runSpin(SpinMode.ALL_TRAILS);
-    			pathNumber++;
-    		} while (pathNumber <= states.size());
-    		pathArea.setText(Config.FINAL_STATE + currentState + ": "+ inputs);
-    		partition = partition + "q" + currentState + ": "+ inputs + "\n";
-        	WriteGraph.writeGraph("fa", states, transitions);
-            displayGraphicsFile("fa");
-            if (currentState == states.size() - 1) {
-            	JTextArea p = new JTextArea(partition);
-            	p.setFont(font);
-            	topSplitPane.setRightComponent(new JPanel().add(p));
-            }
+          inputs.clear();
+          pathNumber = 1;
+          do {
+            RunSpin.runSpin(SpinMode.ALL_TRAILS);
+            pathNumber++;
+          } while (pathNumber <= states.size());
+          pathArea.setText(Config.FINAL_STATE + currentState + ": "+ inputs);
+          partition = partition + "q" + currentState + ": "+ inputs + "\n";
+          WriteGraph.writeGraph("fa", states, transitions);
+          displayGraphicsFile("fa");
+          if (currentState == states.size() - 1) {
+            JTextArea p = new JTextArea(partition);
+            p.setFont(font);
+            topSplitPane.setRightComponent(new JPanel().add(p));
+          }
         }
         
         else if (e.getSource() == toolOptions)
@@ -376,20 +362,6 @@ public class VN extends JFrame implements ActionListener {
 
     public static void main(java.lang.String[] args) {
         final String s = ((args.length > 0) ? args[0] + Config.jflapExt : "");
-        final String interactive = ((args.length > 1) ? args[1] : "");
-        final boolean choose = (args.length > 2) && (args[2].equals("choose"));
-        if (!interactive.equals("")) {
-            File f = new File(s);
-          	VN.setFileName(f);
-            new ReadXML().readXML(file);
-            if (interactive.equals("promela"))
-              GenerateSpinInteractive.writePromela(choose);
-            else
-              GenerateJavaInteractive.writeJava(
-                choose, interactive.equals("jeliot"));
-            return;
-        }
-        System.out.println(interactive);
         javax.swing.SwingUtilities.invokeLater(
             new Runnable() {
                 public void run() {
