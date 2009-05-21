@@ -41,28 +41,11 @@ class RunSpin {
         }
     }
 
-    static void runC() {
-        if (Config.VERBOSE) 
-        	VN.progress(Config.RUN_C);
-        Process p;
-        try {
-        	File pf = new File(VN.fileRoot + Config.PromelaExt).getParentFile();
-            ProcessBuilder pb = new ProcessBuilder(
-            		Config.getStringProperty("C_COMMAND"),
-            		"-DSAFETY", "-o", "pan", "pan.c");
-            if (pf != null) pb.directory(pf.getCanonicalFile());
-            p = pb.start();
-            p.waitFor();
-        }
-        catch (InterruptedException e) {  }
-        catch (IOException e) { VN.fileError(Config.PromelaExt); }
-    }
-
     static boolean runPan(boolean allTrails) {
         Process p;
         boolean accepted = false;
         if (Config.VERBOSE) 
-        	VN.progress(Config.RUN_PAN);
+        	VN.progress(Config.RUN_ERIGONE);
         try {
         	File pf = new File(VN.fileRoot + Config.PromelaExt).getParentFile();
         	String panCommand = Config.getStringProperty("PAN");
@@ -82,12 +65,12 @@ class RunSpin {
             do { 
             	s = input.readLine();
             	if (s == null) break;
-            	else if (s.indexOf("assertion violated") != -1)
+            	else if (s.indexOf("assert statement is false") != -1)
             		accepted = true;
-            	else if (!allTrails && s.indexOf("errors:") != -1) 
-            		if (Integer.parseInt(
-            			s.substring(s.indexOf("errors:")+7).trim()) < VN.pathNumber)
-            			accepted = false;  // No more accepting computations
+            // 	else if (!allTrails && s.indexOf("errors:") != -1) 
+            // 		if (Integer.parseInt(
+            // 			s.substring(s.indexOf("errors:")+7).trim()) < VN.pathNumber)
+            // 			accepted = false;  // No more accepting computations
             } while (true);
             p.waitFor();
             if (!allTrails && !accepted) 
@@ -99,6 +82,7 @@ class RunSpin {
     }
     
     static void runSpin(VN.SpinMode spinMode) {
+      System.out.println(spinMode);
     	boolean allTrails = spinMode == VN.SpinMode.ALL_TRAILS;
     	if (allTrails) spinMode = VN.SpinMode.TRAIL;
         String inputString = "";
@@ -112,29 +96,25 @@ class RunSpin {
 	        } catch (IOException e) { VN.fileError(Config.pathExt); }
         
         if (Config.VERBOSE) 
-        	VN.progress(Config.RUN_SPIN + ": " + spinMode);
+        	VN.progress(Config.RUN_ERIGONE + ": " + spinMode);
         Process p;
         ProcessBuilder pb = null;
         try {
             // Use ProcessBuilder to run Spin, redirecting ErrorStream
             if (spinMode == VN.SpinMode.RANDOM)
             	pb = new ProcessBuilder(
-            		Config.getStringProperty("SPIN_COMMAND"), 
-            		"-B", "-T", 
-                    VN.fileName + Config.PromelaExt);
+            		Config.getStringProperty("ERIGONE_COMMAND"), 
+                  "-r", VN.fileName + Config.PromelaExt);
             else if (spinMode == VN.SpinMode.INTERACTIVE)
             	pb = new ProcessBuilder(
-            		Config.getStringProperty("SPIN_COMMAND"), 
-            		"-B", "-T", "-i", "-X", 
-                    VN.fileName + Config.PromelaExt);
+            		Config.getStringProperty("ERIGONE_COMMAND"), 
+                  "-i", VN.fileName + Config.PromelaExt);
             else if (spinMode == VN.SpinMode.VERIFY)
-            	pb = new ProcessBuilder(Config.getStringProperty("SPIN_COMMAND"),
-            		"-a", 
-                    VN.fileName + Config.PromelaExt);
+            	pb = new ProcessBuilder(Config.getStringProperty("ERIGONE_COMMAND"),
+            		"-s", VN.fileName + Config.PromelaExt);
             else if (spinMode == VN.SpinMode.TRAIL)
-            	pb = new ProcessBuilder(Config.getStringProperty("SPIN_COMMAND"),
-            		"-B", "-T", "-t" + (allTrails ? VN.pathNumber: ""),
-                    VN.fileName + Config.PromelaExt);
+            	pb = new ProcessBuilder(Config.getStringProperty("ERIGONE_COMMAND"),
+            		"-g -d", VN.fileName + Config.PromelaExt);
             File pf = new File(VN.fileRoot + Config.PromelaExt).getParentFile();
             if (pf != null) pb.directory(pf.getCanonicalFile());
             pb.redirectErrorStream(true);
@@ -154,7 +134,7 @@ class RunSpin {
             inputString = "";
             while (true) {
                 s = input.readLine();
-//                System.out.println(s);
+                System.out.println(s);
                 if (s == null) 
                     break;
                 else if (s.startsWith("**")) {
@@ -177,35 +157,24 @@ class RunSpin {
                 }
                 else if ((spinMode != VN.SpinMode.INTERACTIVE)) {
                 }
-                else if (s.indexOf("(FA)") != -1) {
-                    choices[numChoices++] = s;
+                else if (s.startsWith("executable transitions=")) {
+                  numChoices = 0;
                 }
-                else if (s.startsWith("Make Selection")) {
-                	// Weirdness of Spin: double set of choices
-                	int unexecutable = 0;
-                	for (int j = 0; j < numChoices; j++)
-                		if (choices[j].indexOf("unexecutable") != -1)
-                			unexecutable++;
-                	if ((numChoices > 0) && (unexecutable == numChoices)) {
-						VN.pathArea.append(" : " + Config.RESULT_REJECT);
-                        out("q\n");
-                        break;
-                	}
-                    if (numChoices <= 1) out("1\n");
-                    else {
-                        pathWriter.flush();
-                        VN.showGraph();
-                        int choice = 
-                        	selectChoice(choices, numChoices, lastState);
-                        if (choice == numChoices+1) {
-							VN.pathArea.append(" : " + Config.QUIT);
-                            out("q\n");
-                            break;
-                        }
-                        else out(choice + "\n");
-                    }
-                    s = input.readLine();
-                    numChoices = 0;
+                else if (s.startsWith("process=")) {
+                  choices[numChoices++] = s;
+                }
+                else if (s.startsWith("choose from=")) {
+                  pathWriter.flush();
+                  VN.showGraph();
+                  int choice = selectChoice(choices, numChoices, lastState);
+                  if (choice == numChoices+1) {
+                    VN.pathArea.append(" : " + Config.QUIT);
+                    out("q\n");
+                    break;
+                  }
+                  else
+                    out(choice + "\n");
+                  s = input.readLine();
                 }
             }
             // Wait for Spin process to end
@@ -225,38 +194,55 @@ class RunSpin {
     		System.out.print("#"+tokens[j]);
     	System.out.println("#");
     }
-    
+
+    // Extract value from named association: "name=value,"
+    public static String extract(String s, String pattern) {
+      int i = s.indexOf(pattern);
+      if (i == -1) return "";
+      i = i + pattern.length();
+      return s.substring(i, s.indexOf(",", i+1));
+    }
+
+    // Extract numeric value from named association: "name=value,"
+    public static int extractNum(String s, String pattern) {
+      int i = s.indexOf(pattern);
+      if (i == -1) return -1;
+      i = i + pattern.length();
+      String t = s.substring(i, s.indexOf(",", i+1));
+      try {
+        return Integer.parseInt(t);
+      }
+      catch(NumberFormatException e) {
+        return -1;
+      }
+    }
+
     static int selectChoice(String[] choices, int numChoices, String lastState) {
         String[] selections = new String[numChoices+1];
+        String[] tokens;
+        String source, target, message;
+        int lineIndex, last, n;
+        char letter = ' ';
         for (int i = 0; i < numChoices; i++) {
-            String[] tokens = choices[i].split("\\s");
-            // Weirdness of Spin: extra token for single digit numbers
-            int lineIndex = 9;
-            if (tokens[lineIndex].equals("")) lineIndex++;
-            String source = spinProgram[java.lang.Integer.parseInt(tokens[lineIndex])+i];
+            lineIndex = extractNum(choices[i], "line=");
+            source = spinProgram[lineIndex-1];
             tokens = source.split("\\s");
-            char letter = ' ';
-            if (tokens[2].equals("true")) letter = 'L';
-            else if (tokens[2].equals("i[h]")) letter = tokens[4].charAt(1);
-            int last = tokens.length-1;
-            String target = tokens[last].substring(0,tokens[last].length());
+            printTokens(tokens);
+            if (tokens[3].equals("true")) letter = 'L';
+            else if (tokens[3].equals("i[h]")) letter = tokens[5].charAt(1);
+            last = tokens.length-1;
+            target = tokens[last].substring(0,tokens[last].length());
             if (letter == '.') selections[i] = Config.ACCEPT;
-            else selections[i] = "-" + letter + "->" + target;
-            if (choices[i].indexOf("unexecutable") != -1)
-                selections[i] = '[' + selections[i] + ']';
+            selections[i] = "-" + letter + "->" + target;
         }
         choices[numChoices] = Config.QUIT;
         selections[numChoices] = Config.QUIT;
-        int n;
-        String message = Config.SELECT + lastState;
-        do {
-            n = JOptionPane.showOptionDialog(
-                VN.messageArea, message, null, 
-                JOptionPane.DEFAULT_OPTION, JOptionPane.PLAIN_MESSAGE, null,
-                selections, selections[0]);
-            if (n == JOptionPane.CLOSED_OPTION) return numChoices + 1;
-            message = Config.NOT_ENABLED + Config.SELECT + lastState;
-        } while (choices[n].indexOf("unexecutable") != -1);
-        return n+1;
+        message = Config.SELECT + lastState;
+        n = JOptionPane.showOptionDialog(
+            VN.messageArea, message, null, 
+            JOptionPane.DEFAULT_OPTION, JOptionPane.PLAIN_MESSAGE, null,
+            selections, selections[0]);
+        if (n == JOptionPane.CLOSED_OPTION) return numChoices + 1;
+        return n;
     }
 }
