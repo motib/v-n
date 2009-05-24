@@ -41,48 +41,7 @@ class RunSpin {
         }
     }
 
-    static boolean runPan(boolean allTrails) {
-        Process p;
-        boolean accepted = false;
-        if (Config.VERBOSE) 
-        	VN.progress(Config.RUN_ERIGONE);
-        try {
-        	File pf = new File(VN.fileRoot + Config.PromelaExt).getParentFile();
-        	String panCommand = Config.getStringProperty("PAN");
-            if (pf != null) 
-            	panCommand = pf.getCanonicalFile() + File.separator + panCommand;
-            ProcessBuilder pb = 
-            	(allTrails ? 
-            	new ProcessBuilder(panCommand, "-E",  "-c0", "-e") :
-            	new ProcessBuilder(panCommand, "-E",  "-c" + VN.pathNumber));
-            if (pf != null) pb.directory(pf.getCanonicalFile());
-            pb.redirectErrorStream(true);
-            p = pb.start();
-            InputStream istream = p.getInputStream();
-            BufferedReader input =
-                new BufferedReader(new InputStreamReader(istream));
-            String s = "";
-            do { 
-            	s = input.readLine();
-            	if (s == null) break;
-            	else if (s.indexOf("assert statement is false") != -1)
-            		accepted = true;
-            // 	else if (!allTrails && s.indexOf("errors:") != -1) 
-            // 		if (Integer.parseInt(
-            // 			s.substring(s.indexOf("errors:")+7).trim()) < VN.pathNumber)
-            // 			accepted = false;  // No more accepting computations
-            } while (true);
-            p.waitFor();
-            if (!allTrails && !accepted) 
-            	VN.pathArea.append(Config.NO_ACCEPT + (VN.pathNumber-1));
-        }
-        catch (InterruptedException e) {  }
-        catch (IOException e) { VN.fileError(Config.PromelaExt); }
-        return accepted;
-    }
-    
     static void runSpin(VN.SpinMode spinMode) {
-      System.out.println(spinMode);
     	boolean allTrails = spinMode == VN.SpinMode.ALL_TRAILS;
     	if (allTrails) spinMode = VN.SpinMode.TRAIL;
         String inputString = "";
@@ -110,11 +69,13 @@ class RunSpin {
             		Config.getStringProperty("ERIGONE_COMMAND"), 
                   "-i", VN.fileName + Config.PromelaExt);
             else if (spinMode == VN.SpinMode.VERIFY)
-            	pb = new ProcessBuilder(Config.getStringProperty("ERIGONE_COMMAND"),
-            		"-s", VN.fileName + Config.PromelaExt);
+            	pb = new ProcessBuilder(
+                Config.getStringProperty("ERIGONE_COMMAND"),
+            		"-s", "-m" + VN.pathNumber, VN.fileName + Config.PromelaExt);
             else if (spinMode == VN.SpinMode.TRAIL)
             	pb = new ProcessBuilder(Config.getStringProperty("ERIGONE_COMMAND"),
-            		"-g -d", VN.fileName + Config.PromelaExt);
+            		"-g", VN.fileName + Config.PromelaExt);
+            // System.out.println(pb.command());
             File pf = new File(VN.fileRoot + Config.PromelaExt).getParentFile();
             if (pf != null) pb.directory(pf.getCanonicalFile());
             pb.redirectErrorStream(true);
@@ -134,7 +95,7 @@ class RunSpin {
             inputString = "";
             while (true) {
                 s = input.readLine();
-                System.out.println(s);
+                // System.out.println(s);
                 if (s == null) 
                     break;
                 else if (s.startsWith("**")) {
@@ -154,6 +115,10 @@ class RunSpin {
                         	inputString = inputString + s;
                     }
                     isState = !isState;
+                }
+                else if (s.startsWith("verification terminated=successfully,")) {
+                  VN.pathArea.append(Config.NO_ACCEPT + (VN.pathNumber-1));
+                  VN.pathNumber = 0;  // Signal to stop
                 }
                 else if ((spinMode != VN.SpinMode.INTERACTIVE)) {
                 }
