@@ -209,8 +209,10 @@ public class VN extends JFrame implements ActionListener {
             if (spinMode == SpinMode.VERIFY) {
               if (multiple)
                 pathArea.append(Config.ACCEPTS_ON + inputs);
-              else
-                RunSpin.runSpin(SpinMode.TRAIL);
+              else {
+                if (VN.pathNumber != 0)  // Flag to stop
+                  RunSpin.runSpin(SpinMode.TRAIL);
+              }
             }
 	        }
         	showGraph();

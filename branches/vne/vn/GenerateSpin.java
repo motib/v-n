@@ -30,7 +30,7 @@ class GenerateSpin {
 		}
         
         emit("byte i[" + (inputLength+1) + "];");
-        emit("byte h;");
+        emit("byte h, x;");
         emit("active proctype FA() {");
         for (int i = 0; i < inputLength; i++)
           emit("  i["+i+"] = '" + input.charAt(i) + "';");
@@ -49,24 +49,26 @@ class GenerateSpin {
         		Transition tr = (Transition) transitionObject[t];
         		if (tr.from.equals(st.name)) {
                 	if(tr.letter == 'L') 
-                		emit("  :: true -> printf(\"**L\\n\"); goto q" + tr.to);
+                		emit("  :: true -> x=x+" + (x++) + "; printf(\"**L\\n\"); goto q" + tr.to);
                 	else 
                 		emit("  :: i[h] == '" + tr.letter + 
-                    		 "' -> printf(\"**%c\\n\", i[h]); h++; goto q" + tr.to);
+                    		 "' -> x=x+" + (x++) + "; printf(\"**%c\\n\", i[h]); h++; goto q" + tr.to);
                 	t++;
         		}
         		else break;
         	}
         	if (st.finalState) 
-        		emit("  :: i[h] == '.' -> goto accept" );
+        		emit("  :: i[h] == '.' -> x=x+" + (x++) + "; goto accept" );
       		emit("  :: else -> goto reject" );
         	emit("  fi;");
         }
         emit("accept:");
         emit("  printf(\"**" + Config.RESULT_ACCEPT + "\\n\");");
         emit("  assert(false);");
+        emit("  goto halt;");
         emit("reject:");
         emit("    printf(\"**" + Config.RESULT_REJECT + "\\n\")");
+        emit("halt: skip");
         emit("}");
         programWriter.close();
 	}

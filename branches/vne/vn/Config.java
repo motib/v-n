@@ -143,8 +143,7 @@ class Config {
         try {
             in = new FileInputStream(FILE_NAME);
         } catch (FileNotFoundException e1) {
-            System.out.println(
-				"Cannot open VN file, creating new file");
+            System.out.println("Cannot open VN file, creating new file");
             try {
                 saveFile();
                 in = new FileInputStream(FILE_NAME);
