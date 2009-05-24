@@ -36,7 +36,8 @@ class GenerateSpin {
         emit("inline Accept() {");
         emit("\t_ = x;");
         emit("\tprintf(\"**" + Config.RESULT_ACCEPT + "\\n\");");
-        emit("\tassert(false)");
+        emit("\tassert(false);");
+        emit("\tgoto halt");
         emit("}");
 
         emit("proctype FA() {");
@@ -71,6 +72,7 @@ class GenerateSpin {
         		emit("\t:: i[h] == '.' -> " + "x=x+" + (x++) + "; Accept()");
         	emit("\tfi;");
         }
+        emit("halt: skip");
         emit("}");
         emit("active proctype watchdog() {");
         emit("\ttimeout -> printf(\"**" + Config.RESULT_REJECT + "\\n\")");

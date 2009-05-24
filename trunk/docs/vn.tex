@@ -23,7 +23,7 @@
 \setlength{\parskip}{0.20\baselineskip plus 1pt minus 1pt}
 \parindent=0pt
 
-\title{\vn{} - Visualization of Nondeterminism\\User's Guide\\\mbox{}\\\large{Version 2.3}}
+\title{\vn{} - Visualization of Nondeterminism\\User's Guide\\\mbox{}\\\large{Version 2.3.1}}
 \author{Mordechai (Moti) Ben-Ari\\
 Department of Science Teaching\\
 Weizmann Institute of Science\\
@@ -289,6 +289,10 @@ in a \p{JFrame}.
 \p{ImagePanel} displays the \textsc{PNG} files.
 
 \p{GenerateSpin} generates the \prm{} program from the automaton.
+In the generated program, the variable \p{x} is used to ensure that all
+states of the state space are explored, even if the verification
+revisits a state of the automaton several times. The assignment to
+\p{\_} is used to ensure that \p{x} is included in the state vector.
 
 \p{ReadXML} reads the XML description of the automaton from the \p{jff} file and
 stores the data in \p{states} and \p{transitions}. These types are defined in
@@ -313,6 +317,8 @@ For \bu{Next}, \p{pan} is run with the \p{-c} argument.
 \section{Release notes}
 
 \begin{description}
+\item[2.3.1] Fixed bug with \bu{Next} by adding \p{goto halt} to accept
+state.
 \item[2.3] As of Version 6.3, \jf{} as distributed can be invoked from another
 program so a modified version is no longer needed.
 \item[2.2] Generation of interactive programs.
