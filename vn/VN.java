@@ -1,6 +1,6 @@
 /*
   VN - Visualization of Nondeterminism.
-  Copyright 2006 by Mordechai (Moti) Ben-Ari.
+  Copyright 2006-9 by Mordechai (Moti) Ben-Ari.
  
 This program is free software; you can redistribute it and/or
 modify it under the terms of the GNU General Public License
@@ -146,12 +146,12 @@ public class VN extends JFrame implements ActionListener {
         }
 
         else if ((e.getSource() == toolEdit)) {
-        // 	if (file != null) 
-        //     gui.Main.main(new String[]{file.getAbsolutePath()}, true);
-        // 	else if (new File(Config.getStringProperty("DUMMY_JFF_FILE")).exists())
-        // 		gui.Main.main(new String[]{Config.getStringProperty("DUMMY_JFF_FILE")}, true);
-        // 	else 
-        // 		{ progress(Config.NO_JFF_FILE); return; }
+         	if (file != null) 
+             gui.Main.main(new String[]{file.getAbsolutePath()}, true);
+         	else if (new File(Config.getStringProperty("DUMMY_JFF_FILE")).exists())
+         		gui.Main.main(new String[]{Config.getStringProperty("DUMMY_JFF_FILE")}, true);
+         	else 
+         		{ progress(Config.NO_JFF_FILE); return; }
         } 
 
         else if (e.getSource() == toolGenerate) {
@@ -207,12 +207,10 @@ public class VN extends JFrame implements ActionListener {
 	        else {
             RunSpin.runSpin(spinMode);
             if (spinMode == SpinMode.VERIFY) {
-              if (multiple)
+              if (VN.pathNumber != 0)  // Flag to stop
+                RunSpin.runSpin(SpinMode.TRAIL);
+              else if (multiple)
                 pathArea.append(Config.ACCEPTS_ON + inputs);
-              else {
-                if (VN.pathNumber != 0)  // Flag to stop
-                  RunSpin.runSpin(SpinMode.TRAIL);
-              }
             }
 	        }
         	showGraph();
@@ -235,6 +233,7 @@ public class VN extends JFrame implements ActionListener {
         	currentState = (currentState + 1) % states.size();
         	states.get(currentState).finalState = true;
         	GenerateSpin.writePromela(input, inputLength);
+          pathNumber = 0;
         	RunSpin.runSpin(SpinMode.VERIFY);
           inputs.clear();
           pathNumber = 1;

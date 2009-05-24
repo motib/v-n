@@ -3,17 +3,17 @@
 
 [Setup]
 AppName=VN - Visualization of Nondeterminism
-AppVerName=VN - Version 2.3
+AppVerName=VN - Version 3.0
 AppPublisher=Moti Ben-Ari, Weizmann Institute of Science
 AppPublisherURL=http://stwww.weizmann.ac.il/g-cs/benari/vn/index.html
 AppSupportURL=http://stwww.weizmann.ac.il/g-cs/benari/vn/index.html
 AppUpdatesURL=http://stwww.weizmann.ac.il/g-cs/benari/vn/index.html
 DefaultDirName={pf}\vn
 DefaultGroupName=VN
-OutputDir=c:\vn
+OutputDir=c:\vne
 AllowNoIcons=yes
-LicenseFile=C:\vn\txt\gpl.txt
-SetupIconFile=C:\vn\vn.ico
+LicenseFile=C:\vne\txt\gpl.txt
+SetupIconFile=C:\vne\vn.ico
 Compression=lzma
 SolidCompression=yes
 
@@ -21,19 +21,19 @@ SolidCompression=yes
 Name: "english"; MessagesFile: "compiler:Default.isl"
 
 [Files]
-Source: "C:\vn\bin\*"; DestDir: "{app}\bin"; Flags: ignoreversion
-Source: "C:\vn\examples\*.jff"; DestDir: "{app}\examples"; Flags: ignoreversion
-Source: "C:\vn\txt\*"; DestDir: "{app}\txt"; Flags: ignoreversion
-Source: "C:\vn\vn\*.java"; DestDir: "{app}\vn"; Flags: ignoreversion
-Source: "C:\vn\docs\vn.png"; DestDir: "{app}\docs"; Flags: ignoreversion
-Source: "C:\vn\docs\vn.tex"; DestDir: "{app}\docs"; Flags: ignoreversion
-Source: "C:\vn\docs\vn.pdf"; DestDir: "{app}\docs"; Flags: ignoreversion
-Source: "C:\vn\vn.ico"; DestDir: "{app}"; Flags: ignoreversion
-Source: "C:\vn\vn.jar"; DestDir: "{app}"; Flags: ignoreversion
-Source: "C:\vn\build.bat"; DestDir: "{app}"; Flags: ignoreversion
-Source: "C:\vn\config.cfg"; DestDir: "{app}"; Flags: ignoreversion
-Source: "C:\vn\readme.txt"; DestDir: "{app}"; Flags: ignoreversion
-Source: "C:\vn\run.bat"; DestDir: "{app}"; Flags: ignoreversion
+Source: "C:\vne\bin\*"; DestDir: "{app}\bin"; Flags: ignoreversion
+Source: "C:\vne\examples\*.jff"; DestDir: "{app}\examples"; Flags: ignoreversion
+Source: "C:\vne\txt\*"; DestDir: "{app}\txt"; Flags: ignoreversion
+Source: "C:\vne\vn\*.java"; DestDir: "{app}\vn"; Flags: ignoreversion
+Source: "C:\vne\docs\vn.png"; DestDir: "{app}\docs"; Flags: ignoreversion
+Source: "C:\vne\docs\vn.tex"; DestDir: "{app}\docs"; Flags: ignoreversion
+Source: "C:\vne\docs\vn.pdf"; DestDir: "{app}\docs"; Flags: ignoreversion
+Source: "C:\vne\vn.ico"; DestDir: "{app}"; Flags: ignoreversion
+Source: "C:\vne\vn.jar"; DestDir: "{app}"; Flags: ignoreversion
+Source: "C:\vne\build.bat"; DestDir: "{app}"; Flags: ignoreversion
+Source: "C:\vne\config.cfg"; DestDir: "{app}"; Flags: ignoreversion
+Source: "C:\vne\readme.txt"; DestDir: "{app}"; Flags: ignoreversion
+Source: "C:\vne\run.bat"; DestDir: "{app}"; Flags: ignoreversion
 ; NOTE: Don't use "Flags: ignoreversion" on any shared system files
 
 [Icons]

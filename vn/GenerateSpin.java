@@ -1,4 +1,4 @@
-// Copyright 2006 by Mordechai (Moti) Ben-Ari. See VN.java. */
+// Copyright 2006-9 by Mordechai (Moti) Ben-Ari. See VN.java. */
 package vn;
 import java.io.*;
 /*
@@ -32,8 +32,19 @@ class GenerateSpin {
         emit("byte i[" + (inputLength+1) + "];");
         emit("byte h, x;");
         emit("active proctype FA() {");
-        for (int i = 0; i < inputLength; i++)
-          emit("  i["+i+"] = '" + input.charAt(i) + "';");
+
+        if (VN.multiple)
+        	for (int i = 0; i < inputLength; i++) {
+        		String ifString = "\tif ";
+        		for (char c : VN.symbols)
+        			ifString = ifString + " :: i["+i+"] = '" + c + "'";
+        		ifString = ifString + " fi;";
+        		emit(ifString);
+        }
+        else
+          for (int i = 0; i < inputLength; i++)
+            emit("  i["+i+"] = '" + input.charAt(i) + "';");
+
         emit("  i[" + inputLength + "] = '.';"); // Dummy
         emit("  goto q" + initial + ";");
 
@@ -67,7 +78,7 @@ class GenerateSpin {
         emit("  assert(false);");
         emit("  goto halt;");
         emit("reject:");
-        emit("    printf(\"**" + Config.RESULT_REJECT + "\\n\")");
+        emit("    printf(\"**" + Config.RESULT_REJECT + "\\n\");");
         emit("halt: skip");
         emit("}");
         programWriter.close();

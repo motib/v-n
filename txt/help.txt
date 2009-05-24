@@ -16,8 +16,7 @@
  
  "Options" enables you to change the size of the nodes and labels 
  in the graphs, and to select whether paths should be highlighted
- in color or bold. The options labeled "Interactive" and "Choose"
- are described in the VN documentation.
+ in color or bold.
 
  Error messages from VN are displayed in the text area at the bottom 
  of the screen. Graphs of automata are displayed in the left-hand pane 
