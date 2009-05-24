@@ -1,4 +1,4 @@
-// Copyright 2006 by Mordechai (Moti) Ben-Ari. See VN.java. */
+// Copyright 2006-9 by Mordechai (Moti) Ben-Ari. See VN.java. */
 package vn;
 import javax.swing.*;
 import java.awt.event.*;

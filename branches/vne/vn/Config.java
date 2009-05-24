@@ -1,4 +1,4 @@
-// Copyright 2006 by Mordechai (Moti) Ben-Ari. See VN.java. */
+// Copyright 2006-9 by Mordechai (Moti) Ben-Ari. See VN.java. */
 package vn;
 import java.awt.event.KeyEvent;
 import java.io.*;
@@ -14,14 +14,14 @@ import java.util.Properties;
 
 class Config {
     static final String 	VERSION = " V3.0";
-    static final String 	TITLE = 
+    static final String 	TITLE =
         "VN - Visualization of Nondeterminism" + VERSION;
 
 	static private Properties properties = new Properties();
 	static private final String FILE_NAME = "config.cfg";
 
 	// Verbose output in progress pane
-	static final boolean    VERBOSE = true;
+	static final boolean    VERBOSE = false;
 	
 	private static void setDefaultProperties() {
 		properties.put("SOURCE_DIRECTORY", "examples");
@@ -95,40 +95,38 @@ class Config {
     static final int 		OKMN     = KeyEvent.VK_O;
     static final String CANCEL   = "Cancel";
     static final int 		CANCELMN = KeyEvent.VK_A;
-	  static final String	SIZE	 = "Size";
+	  static final String	SIZE	   = "Size";
 	  static final String SMALL 	 = "Small";
     static final int 		SMALLMN  = KeyEvent.VK_S;
     static final String MEDIUM	 = "Medium";
     static final int 		MEDIUMMN = KeyEvent.VK_M;
-    static final String LARGE	 = "Large";
+    static final String LARGE	   = "Large";
     static final int 		LARGEMN  = KeyEvent.VK_L;
-    static final String	HIGHLIGHT = "Highlight";
-    static final String COLOR	 = "Color";
+    static final String	HIGHLIGHT= "Highlight";
+    static final String COLOR	   = "Color";
     static final int 		COLORMN  = KeyEvent.VK_C;
-    static final String	BOLD	 = "Bold";
+    static final String	BOLD	   = "Bold";
     static final int 		BOLDMN   = KeyEvent.VK_B;
     
-    static final String		ENTER_NUMBER = "Enter a positive integer and select Generate";
-    static final String   FILE_ERROR   = "File error ";
-    static final String		NO_INPUT     = "Enter a nonempty string or positive integer and select Generate";
-    static final String		NO_JFF_FILE  = "Open a \"jff\" file with the automaton";
-    static final String		NO_MULTIPLE  = "Enter a nonempty string and select Generate";
+    static final String	ENTER_NUMBER = "Enter a positive integer and select Generate";
+    static final String FILE_ERROR   = "File error ";
+    static final String	NO_INPUT     = "Enter a nonempty string or positive integer and select Generate";
+    static final String	NO_JFF_FILE  = "Open a \"jff\" file with the automaton";
+    static final String	NO_MULTIPLE  = "Enter a nonempty string and select Generate";
     
-    static final String		DEBUG_WRITE  = "Writing debug file";
-    static final String		GRAPH_WRITE  = "Writing graph ";
-    static final String	  READ_PATH    = "Reading path file";
-    static final String   READING      = "Reading ";
-    static final String		RUN_DOT      = "Running dot";
-    static final String		RUN_ERIGONE  = "Running Erigone";
-    static final String		SPIN_WRITE   = "Generating program ";
-    static final String   SPIN_READ    = "Reading Promela program ";
+    static final String	GRAPH_WRITE  = "Writing graph ";
+    static final String	READ_PATH    = "Reading path file";
+    static final String READING      = "Reading ";
+    static final String	RUN_DOT      = "Running dot";
+    static final String	RUN_ERIGONE  = "Running Erigone";
+    static final String	SPIN_WRITE   = "Generating program ";
+    static final String SPIN_READ    = "Reading Promela program ";
     
     static final String   ACCEPT       = "Accept";
     static final String		ACCEPTS_ON	 = ", inputs: ";
     static final String		FINAL_STATE  = "Inputs accepted by final state q";
     static final String		GENERATED    = "Program generated";
     static final String   NO_ACCEPT    = "Number of accepting computations: ";
-    static final String   NOT_ENABLED  = "Transition not enabled\n";
     static final String   QUIT         = "Quit";
     static final String   RESULT_ACCEPT= "Accepted!";
     static final String   RESULT_REJECT= "Rejected ...";

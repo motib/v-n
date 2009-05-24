@@ -1,4 +1,4 @@
-// Copyright 2006 by Mordechai (Moti) Ben-Ari. See VN.java. */
+// Copyright 2006-9 by Mordechai (Moti) Ben-Ari. See VN.java. */
 
 package vn;
 import java.io.*;
@@ -74,7 +74,8 @@ class RunSpin {
             		"-s", "-m" + VN.pathNumber, VN.fileName + Config.PromelaExt);
             else if (spinMode == VN.SpinMode.TRAIL)
             	pb = new ProcessBuilder(Config.getStringProperty("ERIGONE_COMMAND"),
-            		"-g", VN.fileName + Config.PromelaExt);
+            		"-g" + (allTrails ? VN.pathNumber: ""),
+                VN.fileName + Config.PromelaExt);
             // System.out.println(pb.command());
             File pf = new File(VN.fileRoot + Config.PromelaExt).getParentFile();
             if (pf != null) pb.directory(pf.getCanonicalFile());
