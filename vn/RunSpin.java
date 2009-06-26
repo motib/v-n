@@ -133,7 +133,7 @@ class RunSpin {
                   pathWriter.flush();
                   VN.showGraph();
                   int choice = selectChoice(choices, numChoices, lastState);
-                  if (choice == numChoices+1) {
+                  if (choice == numChoices) {
                     VN.pathArea.append(" : " + Config.QUIT);
                     out("q\n");
                     break;
@@ -193,7 +193,7 @@ class RunSpin {
             lineIndex = extractNum(choices[i], "line=");
             source = spinProgram[lineIndex-1];
             tokens = source.split("\\s");
-            printTokens(tokens);
+//            printTokens(tokens);
             if (tokens[3].equals("true")) letter = 'L';
             else if (tokens[3].equals("i[h]")) letter = tokens[5].charAt(1);
             last = tokens.length-1;
@@ -208,7 +208,7 @@ class RunSpin {
             VN.messageArea, message, null, 
             JOptionPane.DEFAULT_OPTION, JOptionPane.PLAIN_MESSAGE, null,
             selections, selections[0]);
-        if (n == JOptionPane.CLOSED_OPTION) return numChoices + 1;
+        if (n == JOptionPane.CLOSED_OPTION) return numChoices;
         return n;
     }
 }

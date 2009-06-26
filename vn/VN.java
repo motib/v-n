@@ -114,7 +114,7 @@ public class VN extends JFrame implements ActionListener {
         	new ImagePanel(VN.fileRoot + '-' + which + Config.graphExt));
        	if (which.equals("path")) topSplitPane.setRightComponent(s);
        	else topSplitPane.setLeftComponent(s);
-        topSplitPane.setDividerLocation(Config.LEFT_WIDTH);
+        topSplitPane.setDividerLocation(Config.getIntProperty("LEFT_WIDTH"));
     }
 
     static void showGraph() {
@@ -273,7 +273,7 @@ public class VN extends JFrame implements ActionListener {
         pathArea.setText("");
         topSplitPane.setLeftComponent(new JPanel());
         topSplitPane.setRightComponent(new JPanel());
-        topSplitPane.setDividerLocation(Config.LEFT_WIDTH);
+        topSplitPane.setDividerLocation(Config.getIntProperty("LEFT_WIDTH"));
         validate();
     }
 
@@ -327,12 +327,12 @@ public class VN extends JFrame implements ActionListener {
         topSplitPane = new JSplitPane(
             JSplitPane.HORIZONTAL_SPLIT, new JPanel(), new JPanel());
         topSplitPane.setOneTouchExpandable(true);
-        topSplitPane.setDividerLocation(Config.LEFT_WIDTH);
+        topSplitPane.setDividerLocation(Config.getIntProperty("LEFT_WIDTH"));
 
         mainSplitPane = new JSplitPane(
         	JSplitPane.VERTICAL_SPLIT, topSplitPane, messageScrollPane);
         mainSplitPane.setOneTouchExpandable(true);
-        mainSplitPane.setDividerLocation(Config.TB_DIVIDER);
+        mainSplitPane.setDividerLocation(Config.getIntProperty("TB_DIVIDER"));
         
         JPanel topPanel = new JPanel();
         topPanel.setLayout(new java.awt.BorderLayout());
@@ -343,7 +343,8 @@ public class VN extends JFrame implements ActionListener {
         	JScrollPane.VERTICAL_SCROLLBAR_NEVER,
             JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
         pathAreaPane.setPreferredSize(
-        	new java.awt.Dimension(Config.WIDTH-50,Config.PATH_HEIGHT));
+        	new java.awt.Dimension(
+            Config.getIntProperty("WIDTH")-50,Config.PATH_HEIGHT));
         topPanel.add(pathAreaPane, java.awt.BorderLayout.SOUTH);
 
         JPanel contentPane = new JPanel();
@@ -356,7 +357,7 @@ public class VN extends JFrame implements ActionListener {
 		// Configuration JFrame and make visible
         setFont(font);
         setTitle(Config.TITLE);
-        setSize(Config.WIDTH, Config.HEIGHT);
+        setSize(Config.getIntProperty("WIDTH"), Config.getIntProperty("HEIGHT"));
         setLocationRelativeTo(null); 
         setVisible(true);
     }
