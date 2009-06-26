@@ -31,8 +31,12 @@ class Config {
 	  properties.put("DOT_COMMAND",		   "bin\\dot.exe");
 		properties.put("DUMMY_JFF_FILE",	 "examples\\dummy.jff");
 
-		properties.put("HIGHLIGHT", 		Integer.toString(0));  // Color
-		properties.put("GRAPH_SIZE", 		Integer.toString(2));  // Large
+		properties.put("HIGHLIGHT",  Integer.toString(0));  // Color
+		properties.put("GRAPH_SIZE", Integer.toString(2));  // Large
+    properties.put("WIDTH", 		 Integer.toString(1000));
+    properties.put("HEIGHT", 		 Integer.toString(720));
+    properties.put("LEFT_WIDTH", Integer.toString(500));
+    properties.put("TB_DIVIDER", Integer.toString(530));
 	}
 
     static final String 	jflapExt = ".jff";
@@ -47,10 +51,6 @@ class Config {
     static final int    CHOICES = 10;
 	  static final int 		DELTA = 100;  // Dummy node name offset
 
-    static final int 		WIDTH = 1000;
-    static final int 		HEIGHT = 720;
-    static final int    LEFT_WIDTH = 500;
-    static final int    TB_DIVIDER = 530;
     static final int    BUTTON_WIDTH = 70;
     static final int    BUTTON_HEIGHT = 40;
     static final int    TEXT_WIDTH = 150;

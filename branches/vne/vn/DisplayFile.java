@@ -29,7 +29,8 @@ class DisplayFile extends JFrame implements ActionListener {
                 KeyStroke.getKeyStroke(KeyEvent.VK_ESCAPE, 0),
                 JComponent.WHEN_IN_FOCUSED_WINDOW);
         setTitle(Config.TITLE + " - " + title);
-        setSize(2*Config.WIDTH/3, 2*Config.HEIGHT/3);
+        setSize(2*Config.getIntProperty("WIDTH")/3, 
+                2*Config.getIntProperty("HEIGHT")/3);
         setLocationRelativeTo(null); 
         setVisible(true);
     }
