@@ -13,7 +13,7 @@ import java.util.Properties;
  */
 
 class Config {
-    static final String 	VERSION = " V3.0";
+    static final String 	VERSION = " V3.1.1";
     static final String 	TITLE =
         "VN - Visualization of Nondeterminism" + VERSION;
 
