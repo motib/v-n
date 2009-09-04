@@ -3,7 +3,7 @@
 
 [Setup]
 AppName=VN - Visualization of Nondeterminism
-AppVerName=VN - Version 3.0
+AppVerName=VN - Version 3.1.1
 AppPublisher=Moti Ben-Ari, Weizmann Institute of Science
 AppPublisherURL=http://stwww.weizmann.ac.il/g-cs/benari/vn/index.html
 AppSupportURL=http://stwww.weizmann.ac.il/g-cs/benari/vn/index.html
@@ -32,7 +32,7 @@ Source: "C:\vne\vn.ico"; DestDir: "{app}"; Flags: ignoreversion
 Source: "C:\vne\vn.jar"; DestDir: "{app}"; Flags: ignoreversion
 Source: "C:\vne\build.bat"; DestDir: "{app}"; Flags: ignoreversion
 Source: "C:\vne\config.cfg"; DestDir: "{app}"; Flags: ignoreversion
-Source: "C:\vne\readme.txt"; DestDir: "{app}"; Flags: ignoreversion
+Source: "C:\vne\dist\readme.txt"; DestDir: "{app}"; Flags: ignoreversion
 Source: "C:\vne\run.bat"; DestDir: "{app}"; Flags: ignoreversion
 ; NOTE: Don't use "Flags: ignoreversion" on any shared system files
 
