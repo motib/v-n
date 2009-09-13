@@ -34,6 +34,7 @@ public class VN extends JFrame implements ActionListener {
   static String   input;		        // Textfield for input or length
   static int 		  currentState;		  // Current final state for DFA
   static String	  partition;			  // Equivalence classes for DFA
+  public static File editorFile;    // File returned from editor
 
     // Databases of states and transitions for FA and path
 	static ArrayList<State> states = 
@@ -125,6 +126,34 @@ public class VN extends JFrame implements ActionListener {
     	readAndShow("fa-path");
     }
 
+    private void openFile(File f) {
+      messageArea.setText("");
+      clearAreas();
+      setFileName(f);
+      setTitle(Config.TITLE + " - " + fileName);
+      readAndShow("fa");
+    }
+
+    // Wait until editor is finished and then reload NDFA file
+    private class RunThread extends Thread {
+      public void run() {
+        while (editorFile == null)
+          try { Thread.sleep(50); }
+          catch (InterruptedException e) {}
+        openFile(editorFile);
+      }
+    }
+
+    private void runAndWait(String name) {
+      if (name == null)
+        vn.editor.Main.main(new String[]{});
+      else
+        vn.editor.Main.main(new String[]{name});
+      editorFile = null;
+      RunThread t = new RunThread();
+      t.start();
+    }
+
     // Listener
     public void actionPerformed(ActionEvent e) {
     	int inputLength;
@@ -137,21 +166,21 @@ public class VN extends JFrame implements ActionListener {
             if(fileChooser.showOpenDialog(null) != JFileChooser.APPROVE_OPTION) 
             	return;
             else {
-                messageArea.setText("");
-                clearAreas();
-                setFileName(fileChooser.getSelectedFile());
-          	    setTitle(Config.TITLE + " - " + fileName);
-                readAndShow("fa");
+              File f = fileChooser.getSelectedFile();
+              if (!f.exists()) {
+                progress(Config.FILE_ERROR);
+                return;
+              }
+              else
+                openFile(f);
             }
         }
 
         else if ((e.getSource() == toolEdit)) {
-         	if (file != null) 
-             gui.Main.main(new String[]{file.getAbsolutePath()}, true);
-         	else if (new File(Config.getStringProperty("DUMMY_JFF_FILE")).exists())
-         		gui.Main.main(new String[]{Config.getStringProperty("DUMMY_JFF_FILE")}, true);
-         	else 
-         		{ progress(Config.NO_JFF_FILE); return; }
+         	if (file != null)
+         	  runAndWait(file.getAbsolutePath());
+          else
+         	  runAndWait(null);
         } 
 
         else if (e.getSource() == toolGenerate) {
