@@ -12,8 +12,8 @@ import java.util.Properties;
  *   Texts for messages and errors
  */
 
-class Config {
-    static final String 	VERSION = " V3.1.1";
+public class Config {
+    static final String 	VERSION = " V3.2.0";
     static final String 	TITLE =
         "VN - Visualization of Nondeterminism" + VERSION;
 
@@ -29,7 +29,6 @@ class Config {
 	  properties.put("ABOUT_FILE_NAME",	 "txt\\copyright.txt");
 	  properties.put("ERIGONE_COMMAND",  "bin\\erigone.exe");
 	  properties.put("DOT_COMMAND",		   "bin\\dot.exe");
-		properties.put("DUMMY_JFF_FILE",	 "examples\\dummy.jff");
 
 		properties.put("HIGHLIGHT",  Integer.toString(0));  // Color
 		properties.put("GRAPH_SIZE", Integer.toString(2));  // Large
@@ -39,11 +38,12 @@ class Config {
     properties.put("TB_DIVIDER", Integer.toString(530));
 	}
 
-    static final String 	jflapExt = ".jff";
-    static final String 	dotExt   = ".dot";
-    static final String 	graphExt = ".png";
-    static final String 	pathExt  = ".pth";
-    static final String 	PromelaExt = ".pml";
+    public
+    static final String jflapExt   = ".jff";
+    static final String dotExt     = ".dot";
+    static final String graphExt   = ".png";
+    static final String pathExt    = ".pth";
+    static final String PromelaExt = ".pml";
 
     static final int 		STATES = 100;
     static final int 		TRANSITIONS = 200;
@@ -170,27 +170,27 @@ class Config {
     }
 
 	// Interface to get/set propertyies of various types
-    static String getStringProperty(String s) {
+    public static String getStringProperty(String s) {
         return properties.getProperty(s);
     }
 
-    static void setStringProperty(String s, String newValue) {
+    public static void setStringProperty(String s, String newValue) {
         properties.setProperty(s, newValue);
     }
 
-    static boolean getBooleanProperty(String s) {
+    public static boolean getBooleanProperty(String s) {
         return Boolean.valueOf(properties.getProperty(s)).booleanValue();
     }
 
-    static void setBooleanProperty(String s, boolean newValue) {
+    public static void setBooleanProperty(String s, boolean newValue) {
         properties.setProperty(s, Boolean.toString(newValue));
     }
 
-    static int getIntProperty(String s) {
+    public static int getIntProperty(String s) {
         return Integer.valueOf(properties.getProperty(s)).intValue();
     }
 
-    static void setIntProperty(String s, int newValue) {
+    public static void setIntProperty(String s, int newValue) {
         properties.setProperty(s, Integer.toString(newValue));
     }
 }
