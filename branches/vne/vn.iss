@@ -3,12 +3,12 @@
 
 [Setup]
 AppName=VN - Visualization of Nondeterminism
-AppVerName=VN - Version 3.2
+AppVerName=VN - Version 3.2.0
 AppPublisher=Moti Ben-Ari, Weizmann Institute of Science
 AppPublisherURL=http://stwww.weizmann.ac.il/g-cs/benari/vn/index.html
 AppSupportURL=http://stwww.weizmann.ac.il/g-cs/benari/vn/index.html
 AppUpdatesURL=http://stwww.weizmann.ac.il/g-cs/benari/vn/index.html
-DefaultDirName={pf}\vn
+DefaultDirName=C:\vn
 DefaultGroupName=VN
 OutputDir=c:\vn
 AllowNoIcons=yes
