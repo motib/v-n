@@ -32,7 +32,7 @@ Source: "C:\vn\vn.ico"; DestDir: "{app}"; Flags: ignoreversion
 Source: "C:\vn\vn.jar"; DestDir: "{app}"; Flags: ignoreversion
 Source: "C:\vn\build.bat"; DestDir: "{app}"; Flags: ignoreversion
 Source: "C:\vn\config.cfg"; DestDir: "{app}"; Flags: ignoreversion
-Source: "C:\vn\dist\readme.txt"; DestDir: "{app}"; Flags: ignoreversion
+Source: "C:\vn\dist\release.html"; DestDir: "{app}"; Flags: ignoreversion
 Source: "C:\vn\run.bat"; DestDir: "{app}"; Flags: ignoreversion
 ; NOTE: Don't use "Flags: ignoreversion" on any shared system files
 
