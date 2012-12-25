@@ -3,7 +3,7 @@
 
 [Setup]
 AppName=VN - Visualization of Nondeterminism
-AppVerName=VN - Version 3.2.0
+AppVerName=VN - Version 3.2.2
 AppPublisher=Moti Ben-Ari, Weizmann Institute of Science
 AppPublisherURL=http://stwww.weizmann.ac.il/g-cs/benari/vn/index.html
 AppSupportURL=http://stwww.weizmann.ac.il/g-cs/benari/vn/index.html
