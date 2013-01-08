@@ -16,17 +16,17 @@ import javax.xml.parsers.SAXParser;
 
 public class ReadXML extends DefaultHandler {
 	
-	// Variables for storing data between callbacks
-	State state = null;
+    // Variables for storing data between callbacks
+    State state = null;
     Transition transition = null;
     boolean initial = false;
     boolean finalState = false;
-	String stateName = "";
+    String stateName = "";
     String from = "";
     String to = "";
-	char letter = ' ';
-	String current = null;
-	
+    String letter = "";
+    String current = null;
+  	
     public void startDocument() throws SAXException {}
     public void endDocument() throws SAXException {}
 
@@ -67,7 +67,11 @@ public class ReadXML extends DefaultHandler {
     	else if (current.equals("to")) 
     		to = new String(buf, offset, len);
     	else if (current.equals("read"))
-    		letter = (offset == 0 ? 'L' : buf[offset]);
+        if (offset == 0)
+          letter = new String("L");
+        else
+          // Can be more than one letter on a JFLAP transition
+    		  letter = new String(buf, offset, len);
     	current = null;
     }
 
@@ -79,8 +83,11 @@ public class ReadXML extends DefaultHandler {
     		initial = false; finalState = false;
     	}
     	else if (qName.equals("transition")) {
-    		transition = new Transition(from, to, letter);
-    		VN.transitions.add(transition);
+        for (int i = 0; i < letter.length(); i=i+2) {
+          // Can be more than one letter on a JFLAP transition: a,b,c
+          transition = new Transition(from, to, letter.charAt(i));
+          VN.transitions.add(transition);
+        }
     	}
     }
 
